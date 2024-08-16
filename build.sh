@@ -73,7 +73,7 @@ MANAGER_BUILD_DIR=${WORKSPACE}/build/manager
 RDMA_BUILD_DIR=${WORKSPACE}/build/rdma
 
 # build lib
-meson setup "${LIB_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan" -Denable_tap="$enable_tap" -Denable_usdt="$enable_usdt"
+meson setup --prefix=/usr "${LIB_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan" -Denable_tap="$enable_tap" -Denable_usdt="$enable_usdt"
 pushd "${LIB_BUILD_DIR}"
 ninja
 if [ "$user" == "root" ] || [ "$OS" == "Windows_NT" ]; then
@@ -86,7 +86,7 @@ popd
 # build rdma lib
 if [ "$OS" != "Windows_NT" ]; then
 	pushd rdma/
-	meson setup "${RDMA_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+	meson setup --prefix=/usr "${RDMA_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 	popd
 	pushd "${RDMA_BUILD_DIR}"
 	ninja
@@ -100,7 +100,7 @@ fi
 
 # build app
 pushd app/
-meson setup "${APP_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+meson setup --prefix=/usr "${APP_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 popd
 pushd "${APP_BUILD_DIR}"
 ninja
@@ -108,7 +108,7 @@ popd
 
 # build tests
 pushd tests/
-meson setup "${TEST_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+meson setup --prefix=/usr "${TEST_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 popd
 pushd "${TEST_BUILD_DIR}"
 ninja
@@ -116,7 +116,7 @@ popd
 
 # build plugins
 pushd plugins/
-meson setup "${PLUGINS_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+meson setup --prefix=/usr "${PLUGINS_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 popd
 pushd "${PLUGINS_BUILD_DIR}"
 ninja
@@ -130,7 +130,7 @@ popd
 # build ld_preload
 if [ "$OS" != "Windows_NT" ]; then
 	pushd ld_preload/
-	meson setup "${LD_PRELOAD_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+	meson setup --prefix=/usr "${LD_PRELOAD_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 	popd
 	pushd "${LD_PRELOAD_BUILD_DIR}"
 	ninja
@@ -145,7 +145,7 @@ fi
 # build mtl_manager
 if [ "$OS" != "Windows_NT" ]; then
 	pushd manager/
-	meson setup "${MANAGER_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+	meson setup --prefix=/usr "${MANAGER_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 	popd
 	pushd "${MANAGER_BUILD_DIR}"
 	ninja
