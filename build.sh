@@ -83,6 +83,21 @@ else
 fi
 popd
 
+# build mtl_manager
+if [ "$OS" != "Windows_NT" ]; then
+	pushd manager/
+	meson setup --prefix=/usr "${MANAGER_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
+	popd
+	pushd "${MANAGER_BUILD_DIR}"
+	ninja
+	if [ "$user" == "root" ]; then
+		ninja install
+	else
+		sudo ninja install
+	fi
+	popd
+fi
+
 # build rdma lib
 if [ "$OS" != "Windows_NT" ]; then
 	pushd rdma/
@@ -133,21 +148,6 @@ if [ "$OS" != "Windows_NT" ]; then
 	meson setup --prefix=/usr "${LD_PRELOAD_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
 	popd
 	pushd "${LD_PRELOAD_BUILD_DIR}"
-	ninja
-	if [ "$user" == "root" ]; then
-		ninja install
-	else
-		sudo ninja install
-	fi
-	popd
-fi
-
-# build mtl_manager
-if [ "$OS" != "Windows_NT" ]; then
-	pushd manager/
-	meson setup --prefix=/usr "${MANAGER_BUILD_DIR}" -Dbuildtype="$buildtype" -Denable_asan="$enable_asan"
-	popd
-	pushd "${MANAGER_BUILD_DIR}"
 	ninja
 	if [ "$user" == "root" ]; then
 		ninja install
