@@ -190,17 +190,18 @@ int main(int argc, char** argv) {
       ops_tx.port.dip_addr[MTL_SESSION_PORT_P][3] += i;
     }
     ops_tx.port.payload_type = ctx.audio_payload_type;
-    ops_tx.framebuff_cnt = ctx.framebuff_cnt;
+    ops_tx.framebuff_cnt = 1;
     ops_tx.flags = ST30P_TX_FLAG_BLOCK_GET;
     ops_tx.notify_frame_done = tx_st30p_frame_done;
     ops_tx.fmt = ctx.audio_fmt;
     ops_tx.channel = ctx.audio_channel;
     ops_tx.sampling = ctx.audio_sampling;
     ops_tx.ptime = ctx.audio_ptime;
+    ops_tx.fifo_size = 1;
 
     /* set frame size to 10ms time */
     int framebuff_size = st30_calculate_framebuff_size(
-        ops_tx.fmt, ops_tx.ptime, ops_tx.sampling, ops_tx.channel, 10 * NS_PER_MS, NULL);
+        ops_tx.fmt, ops_tx.ptime, ops_tx.sampling, ops_tx.channel, 1 * NS_PER_MS, NULL);
     ops_tx.framebuff_size = framebuff_size;
 
     st30p_tx_handle tx_handle = st30p_tx_create(ctx.st, &ops_tx);
