@@ -415,7 +415,7 @@ static int tx_audio_session_build_packet(struct st_tx_audio_session_impl* s,
   /* update rtp */
   rtp->seq_number = htons(s->st30_seq_id);
   s->st30_seq_id++;
-  rtp->tmstamp = htonl(s->pacing.rtp_time_stamp);
+  rtp->tmstamp = htonl(s->pacing.rtp_time_stamp - s->sample_num);
 
   /* copy payload now */
   uint8_t* payload = (uint8_t*)&rtp[1];
@@ -449,7 +449,7 @@ static int tx_audio_session_build_rtp_packet(struct st_tx_audio_session_impl* s,
   /* update rtp */
   rtp->seq_number = htons(s->st30_seq_id);
   s->st30_seq_id++;
-  rtp->tmstamp = htonl(s->pacing.rtp_time_stamp);
+  rtp->tmstamp = htonl(s->pacing.rtp_time_stamp - s->sample_num);
 
   /* copy payload now */
   uint8_t* payload = (uint8_t*)&rtp[1];
@@ -492,7 +492,7 @@ static int tx_audio_session_rtp_update_packet(struct st_tx_audio_session_impl* s
     rte_atomic32_inc(&s->st30_stat_frame_cnt);
   }
   /* update rtp time */
-  rtp->tmstamp = htonl(s->st30_rtp_time);
+  rtp->tmstamp = htonl(s->st30_rtp_time - s->sample_num);
 
   /* update mbuf */
   mt_mbuf_init_ipv4(pkt);
